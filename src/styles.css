@@ -1,5 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600;700&display=swap");
 
+@font-face {
+  font-family: "Stack Sans Notch";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./assets/fonts/StackSansNotch-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Stack Sans Notch";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./assets/fonts/StackSansNotch-Bold.ttf") format("truetype");
+}
+
 :root {
   color-scheme: light;
   font-family: var(--font-body);
@@ -17,6 +33,11 @@
   --gradient-accent-red: radial-gradient(circle, rgba(250, 50, 31, 0.25) 0%, transparent 70%);
   --gradient-accent-purple: radial-gradient(circle, rgba(90, 19, 145, 0.3) 0%, transparent 70%);
   --gradient-orange-line: linear-gradient(90deg, #ff4b1f 0%, #ff9068 100%);
+  --gradient-orange-scroll: linear-gradient(180deg, #ff4b1f 0%, #ff9068 100%);
+  --gradient-purple-scroll: linear-gradient(180deg, #640ca8 0%, #321a28 100%);
+  --scrollbar-track: transparent;
+  --scrollbar-thumb-solid: #640ca8;
+  --scrollbar-thumb-gradient: var(--gradient-purple-scroll);
   --text-title: rgba(255, 255, 255, 1);
   --text-subtitle: rgba(255, 255, 255, 0.65);
   --text-body: rgba(255, 255, 255, 0.6);
@@ -33,6 +54,7 @@
   --font-logo: "Stack Sans Notch", "Sora", ui-sans-serif, system-ui, sans-serif;
   --page-margin: clamp(24px, 5.55vw, 80px);
   --max-width: 1440px;
+  --topbar-height: 72px;
   background: var(--color-dark);
   color: var(--text-title);
 }
@@ -43,12 +65,48 @@
 
 html {
   scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+  scrollbar-color: var(--scrollbar-thumb-solid) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+
+html[data-scrollbar-theme="orange"] {
+  --scrollbar-thumb-solid: #ff4b1f;
+  --scrollbar-thumb-gradient: var(--gradient-orange-scroll);
+}
+
+html[data-scrollbar-theme="purple"] {
+  --scrollbar-thumb-solid: #640ca8;
+  --scrollbar-thumb-gradient: var(--gradient-purple-scroll);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 100px;
+  background:
+    var(--scrollbar-thumb-gradient) padding-box,
+    transparent border-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background:
+    var(--scrollbar-thumb-solid) padding-box,
+    transparent border-box;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   background: var(--color-dark);
+  overscroll-behavior-y: none;
 }
 
 a {
@@ -58,7 +116,8 @@ a {
 
 .site {
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
+  padding-top: var(--topbar-height);
   background: var(--color-section-gray);
 }
 
@@ -74,19 +133,38 @@ a {
 }
 
 .topbar {
-  position: relative;
-  z-index: 5;
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  right: 0;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  min-height: 72px;
+  min-height: var(--topbar-height);
   padding: 0 var(--page-margin);
   background: var(--color-section-gray);
   box-shadow: 0 1px 0 rgba(13, 6, 10, 0.06);
+  transform: translateY(0);
+  transition:
+    box-shadow 180ms ease,
+    transform 260ms ease;
+  will-change: transform;
+}
+
+.topbar-hidden {
+  box-shadow: none;
+  transform: translateY(-100%);
 }
 
 .brand {
   justify-self: start;
+}
+
+.navbar-logo {
+  display: block;
+  width: clamp(98px, 8vw, 128px);
+  height: auto;
 }
 
 .nav {
@@ -232,17 +310,16 @@ a {
 
 .hero {
   position: relative;
-  min-height: clamp(650px, 62vw, 900px);
+  height: calc(101svh - var(--topbar-height));
   display: grid;
   place-items: center;
   margin-top: -1px;
-  padding: 80px 24px 128px;
+  overflow: hidden;
+  padding: clamp(18px, 3svh, 42px) 24px;
   border-top-right-radius: clamp(190px, 22vw, 360px);
   border-bottom-left-radius: clamp(180px, 30vw, 520px);
   background:
-    var(--gradient-accent-red),
-    var(--gradient-accent-purple),
-    url("./assets/hero-texture.svg") center / cover,
+    url("./assets/brand/herobackground.png") center / cover no-repeat,
     var(--gradient-hero);
   color: var(--text-title);
 }
@@ -258,26 +335,106 @@ a {
 }
 
 .hero-content {
+  align-self: stretch;
+  justify-self: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 2.4svh, 30px);
   width: min(620px, 100%);
   text-align: center;
 }
 
-.hero-content .logo {
-  margin-bottom: 12px;
-  color: var(--color-red);
-  transform: translateY(-10px);
-}
-
 .hero-content p {
   width: min(410px, 100%);
-  margin: 0 0 30px;
+  margin: 0;
   color: var(--text-subtitle);
   font-size: clamp(20px, 1.6vw, 24px);
   font-weight: 600;
   line-height: 1.6;
+}
+
+.hero-logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-red);
+}
+
+.hero-logo-mark {
+  position: relative;
+  display: block;
+  width: clamp(120px, 9.12vw, 155px);
+  aspect-ratio: 0.75;
+}
+
+.hero-flower,
+.hero-pollen {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-flower {
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  transform: translateX(-50%);
+}
+
+.hero-pollen {
+  opacity: 0;
+  transform-origin: 50% 50%;
+}
+
+.hero-pollen-large {
+  top: 3%;
+  left: 37.5%;
+  width: 25%;
+  animation: pollen-spin-in 900ms cubic-bezier(0.22, 1, 0.36, 1) 260ms both;
+}
+
+.hero-pollen-small {
+  top: -10%;
+  left: 62%;
+  width: 16%;
+  animation: pollen-spin-in 820ms cubic-bezier(0.22, 1, 0.36, 1) 1080ms both;
+}
+
+.hero-logo-word {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--gradient-orange-line);
+  background-clip: text;
+  color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: var(--font-logo);
+  font-size: clamp(56px, 7vw, 120px);
+  font-weight: 400;
+  line-height: 0.73;
+  text-transform: lowercase;
+}
+
+@keyframes pollen-spin-in {
+  0% {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.72);
+  }
+
+  72% {
+    opacity: 1;
+    transform: rotate(22deg) scale(1.08);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
 }
 
 .button {
@@ -330,13 +487,13 @@ a {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 58px;
+  margin-top: clamp(14px, 2svh, 26px);
   text-transform: uppercase;
 }
 
 .hero-date strong {
   font-family: var(--font-heading);
-  font-size: clamp(64px, 8vw, 128px);
+  font-size: clamp(48px, 8vw, 64px);
   font-weight: 400;
   line-height: 0.9;
 }
@@ -353,7 +510,7 @@ a {
   place-items: center;
   width: 36px;
   height: 36px;
-  margin-top: 48px;
+  margin-top: clamp(6px, 1.8svh, 24px);
   border-radius: 100px;
   background: var(--color-white);
 }
@@ -406,6 +563,10 @@ a {
 
 .intro {
   position: relative;
+  display: grid;
+  min-height: clamp(648px, 55.8vw, 774px);
+  align-items: center;
+  padding-block: clamp(113px, 9.9vw, 155px);
   background: var(--color-section-gray);
 }
 
@@ -421,7 +582,7 @@ a {
 .intro-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
-  gap: clamp(56px, 8vw, 132px);
+  gap: clamp(65px, 9vw, 151px);
   align-items: center;
 }
 
@@ -478,8 +639,7 @@ a {
   border-radius: 16px;
   padding: clamp(38px, 4vw, 62px) clamp(36px, 4vw, 64px);
   background:
-    radial-gradient(circle at 92% 8%, rgba(255, 255, 255, 0.32) 0 12px, transparent 13px),
-    radial-gradient(circle at 78% 84%, rgba(255, 255, 255, 0.13), transparent 34%),
+    url("./assets/brand/sobreCardBackground.png") center / cover no-repeat,
     linear-gradient(135deg, var(--color-red), #ff6945);
   color: var(--color-purple);
   transition:
@@ -938,7 +1098,7 @@ a {
 
 .partner-logo {
   display: flex;
-  min-height: 62px;
+  min-height: 76px;
   align-items: center;
   justify-content: center;
   color: var(--color-white);
@@ -949,19 +1109,21 @@ a {
   text-align: center;
 }
 
-.partner-logo:nth-child(2),
-.partner-logo:nth-child(6) {
-  font-size: clamp(19px, 2.1vw, 34px);
+.partner-logo img {
+  display: block;
+  width: min(100%, 220px);
+  max-height: 84px;
+  object-fit: contain;
 }
 
-.partner-logo:nth-child(5) {
-  font-family: Georgia, "Times New Roman", serif;
-  font-style: italic;
+.partner-logo:nth-child(2) img,
+.partner-logo:nth-child(6) img {
+  width: min(100%, 250px);
 }
 
-.partner-logo:nth-child(9) {
-  font-family: var(--font-heading);
-  text-transform: uppercase;
+.partner-logo:nth-child(3) img,
+.partner-logo:nth-child(9) img {
+  max-height: 104px;
 }
 
 .partners-square-a {
@@ -982,9 +1144,7 @@ a {
   padding-left: 24px;
   padding-right: 24px;
   background:
-    var(--gradient-accent-red),
-    var(--gradient-accent-purple),
-    url("./assets/cta-texture.svg") center / cover,
+    url("./assets/brand/ctaBackground.png") center / cover no-repeat,
     var(--gradient-dark);
   color: var(--color-white);
   text-align: center;
@@ -1075,6 +1235,10 @@ a {
 }
 
 @media (max-width: 980px) {
+  :root {
+    --topbar-height: 112px;
+  }
+
   .topbar {
     grid-template-columns: 1fr auto;
     gap: 18px;
@@ -1097,6 +1261,11 @@ a {
   .intro-grid,
   .agenda-day {
     grid-template-columns: 1fr;
+  }
+
+  .intro {
+    min-height: auto;
+    padding-block: clamp(94px, 12.6vw, 122px);
   }
 
   .agenda-day {
@@ -1142,6 +1311,10 @@ a {
 }
 
 @media (max-width: 640px) {
+  :root {
+    --topbar-height: 112px;
+  }
+
   .inner,
   .intro-grid,
   .principle-grid {
@@ -1149,7 +1322,7 @@ a {
   }
 
   .topbar {
-    min-height: 64px;
+    min-height: var(--topbar-height);
     padding: 12px 16px 0;
   }
 
@@ -1160,8 +1333,8 @@ a {
   }
 
   .hero {
-    min-height: 660px;
-    padding-top: 74px;
+    height: calc(101svh - var(--topbar-height));
+    padding: 24px 18px 30px;
     border-top-right-radius: 126px;
     border-bottom-left-radius: 156px;
   }
@@ -1171,12 +1344,13 @@ a {
     height: 96px;
   }
 
-  .logo-word {
+  .logo-word,
+  .hero-logo-word {
     font-size: 55px;
   }
 
   .hero-date {
-    margin-top: 44px;
+    margin-top: 18px;
   }
 
   .section-title h2 {
@@ -1185,6 +1359,10 @@ a {
 
   .intro-grid {
     gap: 44px;
+  }
+
+  .intro {
+    padding-block: 79px 88px;
   }
 
   .inspire-panel {

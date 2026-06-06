@@ -1,3 +1,18 @@
+import { useEffect, useState } from "react";
+import florLogo from "./assets/brand/FlorLogo.png";
+import florPolem1 from "./assets/brand/florPolem1.png";
+import florPolem2 from "./assets/brand/florpolem2.png";
+import logoBradesco from "./assets/brand/logoBradesco.png";
+import logoCin from "./assets/brand/logoCin.png";
+import logoCintia from "./assets/brand/logoCintia.png";
+import logoConsultoria from "./assets/brand/logoConsultoria.png";
+import logoLigia from "./assets/brand/logoLigia.png";
+import logoMagalu from "./assets/brand/logoMagalu.png";
+import logoNavbar from "./assets/brand/logoNavbar.png";
+import logoPlexus from "./assets/brand/logoPlexus.png";
+import logoSecretaria from "./assets/brand/logoSecretaria.png";
+import logoTechwoman from "./assets/brand/logoTechwoman.png";
+
 type Pillar = {
   number: string;
   title: string;
@@ -171,16 +186,36 @@ const agenda: AgendaDay[] = [
 ];
 
 const partners = [
-  "Ligia",
-  "Centro de Informática UFPE",
-  "Plexos Institute",
-  "JF Consultoria",
-  "<Cintia/>",
-  "SECTI Pernambuco",
-  "Magalu Cloud",
-  "Bradesco",
-  "Tech Woman",
+  { name: "Ligia", logo: logoLigia },
+  { name: "Centro de Informática UFPE", logo: logoCin },
+  { name: "Plexos Institute", logo: logoPlexus },
+  { name: "JH Consultoria", logo: logoConsultoria },
+  { name: "Cintia", logo: logoCintia },
+  { name: "Secretaria", logo: logoSecretaria },
+  { name: "Magalu Cloud", logo: logoMagalu },
+  { name: "Bradesco", logo: logoBradesco },
+  { name: "Tech Woman", logo: logoTechwoman },
 ];
+
+function NavbarLogo() {
+  return <img className="navbar-logo" src={logoNavbar} alt="HackaWoman" />;
+}
+
+function HeroLogo() {
+  return (
+    <div className="hero-logo" aria-label="HackaWoman">
+      <span className="hero-logo-mark" aria-hidden="true">
+        <img className="hero-flower" src={florLogo} alt="" />
+        <img className="hero-pollen hero-pollen-large" src={florPolem1} alt="" />
+        <img className="hero-pollen hero-pollen-small" src={florPolem2} alt="" />
+      </span>
+      <span className="hero-logo-word">
+        <span>hacka</span>
+        <span>woman</span>
+      </span>
+    </div>
+  );
+}
 
 function HackaLogo({ compact = false }: { compact?: boolean }) {
   return (
@@ -247,11 +282,119 @@ function AgendaBlock({ day }: { day: AgendaDay }) {
 }
 
 function App() {
+  const [isTopbarVisible, setIsTopbarVisible] = useState(true);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const updateTopbar = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollY;
+
+      if (currentScrollY <= 8) {
+        setIsTopbarVisible(true);
+      } else if (scrollDelta > 6) {
+        setIsTopbarVisible(false);
+      } else if (scrollDelta < -6) {
+        setIsTopbarVisible(true);
+      }
+
+      lastScrollY = Math.max(currentScrollY, 0);
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateTopbar);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    let touchStartY = 0;
+    const activeListenerOptions: AddEventListenerOptions = { passive: false };
+
+    const isAtPageTop = () => window.scrollY <= 0;
+
+    const blockWheelAboveTop = (event: WheelEvent) => {
+      if (isAtPageTop() && event.deltaY < 0) {
+        event.preventDefault();
+      }
+    };
+
+    const rememberTouchStart = (event: TouchEvent) => {
+      touchStartY = event.touches[0]?.clientY ?? 0;
+    };
+
+    const blockPullAboveTop = (event: TouchEvent) => {
+      const currentTouchY = event.touches[0]?.clientY ?? touchStartY;
+
+      if (isAtPageTop() && currentTouchY > touchStartY) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener("wheel", blockWheelAboveTop, activeListenerOptions);
+    window.addEventListener("touchstart", rememberTouchStart, activeListenerOptions);
+    window.addEventListener("touchmove", blockPullAboveTop, activeListenerOptions);
+
+    return () => {
+      window.removeEventListener("wheel", blockWheelAboveTop);
+      window.removeEventListener("touchstart", rememberTouchStart);
+      window.removeEventListener("touchmove", blockPullAboveTop);
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateScrollbarTheme = () => {
+      const probeY = window.innerHeight * 0.5;
+      const themedSections = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-scrollbar-section]"),
+      );
+      const activeSection =
+        themedSections.find((section) => {
+          const rect = section.getBoundingClientRect();
+          return rect.top <= probeY && rect.bottom >= probeY;
+        }) ?? themedSections[0];
+
+      document.documentElement.dataset.scrollbarTheme =
+        activeSection?.dataset.scrollbarSection ?? "purple";
+    };
+
+    let ticking = false;
+    const requestThemeUpdate = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateScrollbarTheme();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    updateScrollbarTheme();
+    window.addEventListener("scroll", requestThemeUpdate, { passive: true });
+    window.addEventListener("resize", requestThemeUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", requestThemeUpdate);
+      window.removeEventListener("resize", requestThemeUpdate);
+    };
+  }, []);
+
   return (
     <main className="site">
-      <header className="topbar">
+      <header className={isTopbarVisible ? "topbar" : "topbar topbar-hidden"}>
         <a className="brand" href="#home" aria-label="HackaWoman início">
-          <HackaLogo compact />
+          <NavbarLogo />
         </a>
         <nav className="nav" aria-label="Navegação principal">
           <a href="#sobre">Sobre</a>
@@ -264,12 +407,12 @@ function App() {
         </a>
       </header>
 
-      <section className="hero" id="home">
+      <section className="hero" id="home" data-scrollbar-section="orange">
         <span className="float-square square-white square-a" aria-hidden="true" />
         <span className="float-square square-white square-b" aria-hidden="true" />
         <span className="float-square square-white square-c" aria-hidden="true" />
         <div className="hero-content">
-          <HackaLogo />
+          <HeroLogo />
           <p>Juntas, transformando o hoje e construindo o amanhã.</p>
           <a className="button button-primary" href="#inscricao">
             Garanta sua vaga
@@ -284,7 +427,7 @@ function App() {
         </div>
       </section>
 
-      <section className="intro section-pad" id="sobre">
+      <section className="intro section-pad" id="sobre" data-scrollbar-section="purple">
         <span className="float-square square-white intro-square-a" aria-hidden="true" />
         <div className="intro-grid">
           <div>
@@ -312,7 +455,7 @@ function App() {
         </div>
       </section>
 
-      <section className="highlights" aria-label="Resumo do evento">
+      <section className="highlights" aria-label="Resumo do evento" data-scrollbar-section="purple">
         {highlights.map((item) => (
           <article key={item.title}>
             <h3>{item.title}</h3>
@@ -321,7 +464,7 @@ function App() {
         ))}
       </section>
 
-      <section className="pillars section-pad" id="pilares">
+      <section className="pillars section-pad" id="pilares" data-scrollbar-section="purple">
         <span className="float-square square-white pillar-square-a" aria-hidden="true" />
         <span className="float-square square-orange pillar-square-b" aria-hidden="true" />
         <div className="inner">
@@ -340,7 +483,7 @@ function App() {
         </div>
       </section>
 
-      <section className="principles">
+      <section className="principles" data-scrollbar-section="purple">
         <span className="float-square square-orange principles-square-a" aria-hidden="true" />
         <div className="principle-grid">
           {principles.map((principle) => (
@@ -353,7 +496,7 @@ function App() {
         </div>
       </section>
 
-      <section className="agenda section-pad" id="programacao">
+      <section className="agenda section-pad" id="programacao" data-scrollbar-section="orange">
         <span className="float-square square-orange agenda-square-a" aria-hidden="true" />
         <span className="float-square square-orange agenda-square-b" aria-hidden="true" />
         <div className="inner">
@@ -366,22 +509,22 @@ function App() {
         </div>
       </section>
 
-      <section className="partners section-pad" id="parceiros">
+      <section className="partners section-pad" id="parceiros" data-scrollbar-section="purple">
         <span className="float-square square-purple partners-square-a" aria-hidden="true" />
         <span className="float-square square-purple partners-square-b" aria-hidden="true" />
         <div className="inner">
           <SectionTitle eyebrow="Parceiros e patrocinadores" title="Quem nos apoia." light />
           <div className="partner-grid">
             {partners.map((partner) => (
-              <span className="partner-logo" key={partner}>
-                {partner}
+              <span className="partner-logo" key={partner.name}>
+                <img src={partner.logo} alt={partner.name} />
               </span>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="final-cta section-pad" id="inscricao">
+      <section className="final-cta section-pad" id="inscricao" data-scrollbar-section="orange">
         <div className="cta-content">
           <SectionTitle eyebrow="Inscrições abertas" title="Faça parte da história" light />
           <p>
@@ -395,7 +538,7 @@ function App() {
         </div>
       </section>
 
-      <footer className="footer">
+      <footer className="footer" data-scrollbar-section="orange">
         <div>
           <HackaLogo compact />
           <p>Juntas, transformando o hoje e construindo o amanhã.</p>
