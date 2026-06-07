@@ -1,4 +1,14 @@
 import { useEffect, useState } from "react";
+import decorBranco from "./assets/decor/quadradinhos-branco.png";
+import decorCinza from "./assets/decor/quadradinhos-cinza.png";
+import decorCinza2 from "./assets/decor/quadradinhos-cinza2.png";
+import decorLaranja from "./assets/decor/quadradinbolaranja_novo.png";
+import decorLaranja2 from "./assets/decor/quadradinholaranja2_novo.png";
+import decorLaranja3 from "./assets/decor/quadradinhos-laranja3.png";
+import decorLaranja4 from "./assets/decor/quadradinhos-laranja4.png";
+import decorRoxo from "./assets/decor/quadradinhos-roxo.png";
+import decorRoxo2 from "./assets/decor/quadradinhos-roxo2.png";
+import decorBranco2 from "./assets/decor/quadradins-branco2.png";
 import florLogo from "./assets/brand/FlorLogo.png";
 import florPolem1 from "./assets/brand/florPolem1.png";
 import florPolem2 from "./assets/brand/florpolem2.png";
@@ -116,32 +126,32 @@ const agenda: AgendaDay[] = [
         title: "Abertura oficial e credenciamento",
         subtitle: "Subtítulo para dar contexto",
         place: "Auditório Principal",
-        time: "09h00 - 10h00",
+        time: "9:00h - 10:00h",
       },
       {
         title: "Workshop de UX",
         subtitle: "Subtítulo para dar contexto",
         place: "Local 1",
-        time: "10h00 - 11h00",
+        time: "10:00h - 11:00h",
       },
       {
         title: "HackaWoman",
         subtitle: "Subtítulo para dar contexto",
         place: "Local 1",
-        time: "11h00 - 13h00",
+        time: "10:00h - 11:00h",
         featured: true,
       },
       {
         title: "Palestra Bradesco",
         subtitle: "Subtítulo para dar contexto",
-        place: "Local 5",
-        time: "15h00 - 16h00",
+        place: "Local 3",
+        time: "10:00h - 11:00h",
       },
       {
         title: "Mesa redonda - IA e futuro",
         subtitle: "Subtítulo para dar contexto",
-        place: "Local 6",
-        time: "16h00 - 17h00",
+        place: "Local 3",
+        time: "10:00h - 11:00h",
       },
     ],
   },
@@ -154,32 +164,32 @@ const agenda: AgendaDay[] = [
         title: "Abertura oficial e credenciamento",
         subtitle: "Subtítulo para dar contexto",
         place: "Auditório Principal",
-        time: "09h00 - 10h00",
+        time: "9:00h - 10:00h",
       },
       {
         title: "Hackathon kickoff",
         subtitle: "Subtítulo para dar contexto",
         place: "Local 1",
-        time: "10h00 - 11h00",
+        time: "10:00h - 11:00h",
       },
       {
         title: "HackaWoman",
         subtitle: "Subtítulo para dar contexto",
         place: "Local 1",
-        time: "11h00 - 15h00",
+        time: "10:00h - 11:00h",
         featured: true,
       },
       {
         title: "Mulheres na tecnologia",
         subtitle: "Subtítulo para dar contexto",
         place: "Local 3",
-        time: "15h00 - 16h00",
+        time: "10:00h - 11:00h",
       },
       {
         title: "Papo sobre o futuro",
         subtitle: "Subtítulo para dar contexto",
         place: "Local 3",
-        time: "16h00 - 19h00",
+        time: "10:00h - 11:00h",
       },
     ],
   },
@@ -199,6 +209,18 @@ const partners = [
 
 function NavbarLogo() {
   return <img className="navbar-logo" src={logoNavbar} alt="HackaWoman" />;
+}
+
+function DecorSquares({ className, src }: { className: string; src: string }) {
+  return (
+    <img
+      className={`decor-squares ${className}`}
+      src={src}
+      alt=""
+      aria-hidden="true"
+      draggable={false}
+    />
+  );
 }
 
 function HeroLogo() {
@@ -261,7 +283,10 @@ function AgendaBlock({ day }: { day: AgendaDay }) {
       </div>
       <div className="timeline">
         {day.items.map((item) => (
-          <div className="timeline-item" key={`${day.day}-${item.title}`}>
+          <div
+            className={item.featured ? "timeline-item timeline-item-featured" : "timeline-item"}
+            key={`${day.day}-${item.title}`}
+          >
             <span
               className={item.featured ? "timeline-marker marker-star" : "timeline-marker"}
               aria-hidden="true"
@@ -269,10 +294,10 @@ function AgendaBlock({ day }: { day: AgendaDay }) {
             <div className="timeline-copy">
               <h3>{item.title}</h3>
               <p>{item.subtitle}</p>
-              <div className="timeline-meta">
-                <span>{item.place}</span>
-                <span>{item.time}</span>
-              </div>
+        <div className="timeline-meta">
+          <span className="timeline-place">{item.place}</span>
+          <span className="timeline-time">{item.time}</span>
+        </div>
             </div>
           </div>
         ))}
@@ -408,9 +433,8 @@ function App() {
       </header>
 
       <section className="hero" id="home" data-scrollbar-section="orange">
-        <span className="float-square square-white square-a" aria-hidden="true" />
-        <span className="float-square square-white square-b" aria-hidden="true" />
-        <span className="float-square square-white square-c" aria-hidden="true" />
+        <DecorSquares className="decor-hero-gray" src={decorCinza} />
+        <DecorSquares className="decor-hero-gray-bottom" src={decorCinza2} />
         <div className="hero-content">
           <HeroLogo />
           <p>Juntas, transformando o hoje e construindo o amanhã.</p>
@@ -428,7 +452,6 @@ function App() {
       </section>
 
       <section className="intro section-pad" id="sobre" data-scrollbar-section="purple">
-        <span className="float-square square-white intro-square-a" aria-hidden="true" />
         <div className="intro-grid">
           <div>
             <SectionTitle eyebrow="Sobre o evento" title="Inovação que transforma." />
@@ -456,6 +479,8 @@ function App() {
       </section>
 
       <section className="highlights" aria-label="Resumo do evento" data-scrollbar-section="purple">
+        <DecorSquares className="decor-highlights-white-left" src={decorBranco} />
+        <DecorSquares className="decor-highlights-white-right" src={decorBranco2} />
         {highlights.map((item) => (
           <article key={item.title}>
             <h3>{item.title}</h3>
@@ -465,8 +490,6 @@ function App() {
       </section>
 
       <section className="pillars section-pad" id="pilares" data-scrollbar-section="purple">
-        <span className="float-square square-white pillar-square-a" aria-hidden="true" />
-        <span className="float-square square-orange pillar-square-b" aria-hidden="true" />
         <div className="inner">
           <SectionTitle eyebrow="Nossos pilares" title="O que nos move." />
           <div className="pillar-grid">
@@ -484,7 +507,7 @@ function App() {
       </section>
 
       <section className="principles" data-scrollbar-section="purple">
-        <span className="float-square square-orange principles-square-a" aria-hidden="true" />
+        <DecorSquares className="decor-principles-orange" src={decorLaranja} />
         <div className="principle-grid">
           {principles.map((principle) => (
             <article className="principle-card" key={principle.title}>
@@ -497,8 +520,7 @@ function App() {
       </section>
 
       <section className="agenda section-pad" id="programacao" data-scrollbar-section="orange">
-        <span className="float-square square-orange agenda-square-a" aria-hidden="true" />
-        <span className="float-square square-orange agenda-square-b" aria-hidden="true" />
+        <DecorSquares className="decor-agenda-orange" src={decorLaranja2} />
         <div className="inner">
           <SectionTitle eyebrow="Programação" title="Agenda do evento." light />
           <div className="agenda-list">
@@ -510,8 +532,10 @@ function App() {
       </section>
 
       <section className="partners section-pad" id="parceiros" data-scrollbar-section="purple">
-        <span className="float-square square-purple partners-square-a" aria-hidden="true" />
-        <span className="float-square square-purple partners-square-b" aria-hidden="true" />
+        <DecorSquares className="decor-partners-orange-top" src={decorLaranja3} />
+        <DecorSquares className="decor-partners-purple-top" src={decorRoxo} />
+        <DecorSquares className="decor-partners-purple-bottom" src={decorRoxo2} />
+        <DecorSquares className="decor-partners-orange-bottom" src={decorLaranja4} />
         <div className="inner">
           <SectionTitle eyebrow="Parceiros e patrocinadores" title="Quem nos apoia." light />
           <div className="partner-grid">
