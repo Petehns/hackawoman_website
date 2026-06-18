@@ -24,7 +24,7 @@ import logoPlexus from "./assets/brand/logoPlexus.png";
 import logoSecretaria from "./assets/brand/logoSecretaria.png";
 import logoTechwoman from "./assets/brand/logoTechwoman.png";
 import agendaClockIcon from "./assets/icons/agenda-clock.svg";
-import agendaPinIcon from "./assets/icons/agenda-pin.svg";
+// import agendaPinIcon from "./assets/icons/agenda-pin.svg";
 import compromissoIcon from "./assets/icons/compromisso.png";
 import missaoIcon from "./assets/icons/missao.png";
 import visaoIcon from "./assets/icons/visao.png";
@@ -141,48 +141,48 @@ const agenda: AgendaDay[] = [
         items: [
           {
             title: "Credenciamento",
-            place: "Anfiteatro",
+            // place: "Anfiteatro",
             time: "08:00h - 09:00h",
           },
           {
             title: "Abertura",
             subtitle: "Avisos + Apresentação do tema do hackaton",
-            place: "Anfiteatro",
+            // place: "Anfiteatro",
             time: "09:00h - 09:20h",
           },
           {
             title: "Dinâmica de integração",
-            subtitle: "Hora de trocar contatos / Linkedin",
-            place: "Anfiteatro",
+            subtitle: "Dinâmica rápida de integração → ideia: “conecte-se para crescer” (troca de contatos / LinkedIn)",
+            // place: "Anfiteatro",
             time: "09:20h - 09:40h",
           },
           {
-            title: "Preparação & transição",
-            time: "09:40h - 10:00h",
+            title: "Palestra 1 (Magalu)",
+            time: "09:40h - 10:30h",
           },
           {
-            title: "Palestra 1",
-            place: "Anfiteatro",
-            time: "10:00h - 10:50h",
+            title: "Workshop 1 – CLOUD",
+            // place: "Anfiteatro",
+            time: "09:40h - 10:30h",
           },
           {
-            title: "Workshop 1",
-            place: "Grad 2",
-            time: "10:00h - 11:00h",
+            title: "Coffee-Break + Sorteio",
+            // place: "Grad 2",
+            time: "10:30h - 11:00h",
           },
           {
-            title: "Sorteio",
-            time: "10:50h - 11:00h",
-          },
-          {
-            title: "Painel (Bradesco + Gov + Ligia + Regina Célia)",
-            place: "Anfiteatro",
+            title: "Painel (Bradesco + Gov + Lígia/CIntia + ADM Mulher/CRA)",
             time: "11:00h - 11:50h",
           },
           {
-            title: "Workshop 2",
-            place: "Grad 2",
-            time: "11:00h - 12:00h",
+            title: "Workshop 2 – PITCH",
+            // place: "Grad 2",
+            time: "11:00h - 11:50h",
+          },
+          {
+            title: "Fechamento da manhã + intervalo",
+            // place: "Grad 2",
+            time: "11:50h - 12:00h",
           },
         ],
       },
@@ -190,21 +190,26 @@ const agenda: AgendaDay[] = [
         label: "Tarde",
         items: [
           {
-            title: "Retorno + boas vindas",
+            title: "Retorno + boas-vindas",
             time: "14:00h - 14:15h",
           },
           {
             title: "Palestra com Regina Célia",
-            place: "Anfiteatro",
-            time: "14:15h - 15:40h",
+            // place: "Anfiteatro",
+            time: "14:15h - 15:05h",
           },
           {
-            title: "Sorteio",
-            time: "15:40h - 15:50h",
+            title: "Coffee-Break + Sorteio",
+            // place: "Grad 2",
+            time: "15:05h - 15:35h",
           },
           {
-            title: "Palestra 3",
-            place: "Anfiteatro",
+            title: "Dinâmica de Formação de Equipes",
+            time: "15:35h - 15:50h",
+          },
+          {
+            title: "Palestra com Laís Xavier",
+            // place: "Anfiteatro",
             time: "15:50h - 16:40h",
           },
           {
@@ -230,15 +235,7 @@ const agenda: AgendaDay[] = [
         items: [
           {
             title: "Desenvolvimento de soluções",
-            time: "09:00h - 10:30h",
-          },
-          {
-            title: "Coffee Break",
-            time: "10:30h - 10:45h",
-          },
-          {
-            title: "Desenvolvimento de soluções",
-            time: "10:45h - 12:00h",
+            time: "09:00h - 12:00h",
           },
         ],
       },
@@ -250,21 +247,21 @@ const agenda: AgendaDay[] = [
             time: "14:00h - 15:00h",
           },
           {
-            title: "Coffee Break + Organização dos pitches",
-            time: "15:00h - 15:15h",
+            title: "Organização dos pitches",
+            time: "15:00h - 15:30h",
           },
           {
             title: "Apresentações",
-            subtitle: "10 equipes\nPitch de 3 minutos + 2 minutos de perguntas",
-            time: "15:15h - 15:30h",
+            subtitle: "15 equipes\nPitch de 3 minutos + 2 minutos de perguntas",
+            time: "15:30h - 16:45h",
           },
           {
             title: "Avaliação da banca",
-            time: "16:30h - 16:50h",
+            time: "16:45h - 17:15h",
           },
           {
             title: "Resultado + encerramento",
-            time: "16:50h - 17:00h",
+            time: "17:15h - 18:00h",
           },
         ],
       },

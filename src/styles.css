@@ -1005,7 +1005,7 @@ a {
 
 .agenda-day {
   display: grid;
-  grid-template-columns: clamp(240px, 23.6vw, 340px) minmax(0, 1fr);
+  grid-template-columns: clamp(80px, 23.6vw, 180px) minmax(0, 1fr);
   gap: clamp(24px, 2.6vw, 38px);
 }
 
@@ -1116,7 +1116,8 @@ a {
   position: absolute;
   left: 26px;
   top: 8px;
-  bottom: 37px;
+  /* Substitua o bottom antigo por este cálculo baseado no marcador: */
+  height: calc(100% - 116px); 
   width: 4px;
   background: var(--color-red);
 }
