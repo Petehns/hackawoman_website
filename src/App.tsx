@@ -24,7 +24,7 @@ import logoPlexus from "./assets/brand/logoPlexus.png";
 import logoSecretaria from "./assets/brand/logoSecretaria.png";
 import logoTechwoman from "./assets/brand/logoTechwoman.png";
 import agendaClockIcon from "./assets/icons/agenda-clock.svg";
-// import agendaPinIcon from "./assets/icons/agenda-pin.svg";
+import agendaPinIcon from "./assets/icons/agenda-pin.svg";
 import compromissoIcon from "./assets/icons/compromisso.png";
 import missaoIcon from "./assets/icons/missao.png";
 import visaoIcon from "./assets/icons/visao.png";
