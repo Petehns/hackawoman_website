@@ -721,7 +721,13 @@ function App() {
           </nav>
           <div className="footer-contact">
             <h2>Contato</h2>
-            <a href="mailto:hackawoman@cin.ufpe.br">hackawoman@cin.ufpe.br</a>
+            <a
+  href="https://mail.google.com/mail/?view=cm&to=hackawoman@cin.ufpe.br"
+  target="_blank"
+  rel="noreferrer"
+>
+  hackawoman@cin.ufpe.br
+</a>
             <a
               href="https://www.instagram.com/ligia.ufpe/"
               target="_blank"
