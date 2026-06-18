@@ -419,7 +419,7 @@ function AgendaBlock({ day }: { day: AgendaDay }) {
 function App() {
   const [isTopbarVisible, setIsTopbarVisible] = useState(true);
   const anchorScrollHoldUntilRef = useRef(0);
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const calculateTimeLeft = () => {
     const difference = +new Date('2026-07-03T08:00:00') - +new Date();
     let timeLeft = { dias: 0, horas: 0, minutos: 0, segundos: 0 };
@@ -535,56 +535,48 @@ function App() {
   };
 
   return (
-    <main className="site">
-     <header
+    <main className={isMenuOpen ? "site menu-open" : "site"}>
+      <header
         className={isTopbarVisible ? "topbar" : "topbar topbar-hidden"}
         onClick={handleTopbarAnchorClick}
       >
         <a className="brand" href="#home" aria-label="HackaWoman início">
           <NavbarLogo />
         </a>
-        <nav className="nav" aria-label="Navegação principal">
-          <a href="#sobre">Sobre</a>
-          <a href="#pilares">Pilares</a>
-          <a href="#programacao">Programação</a>
-          <a href="#parceiros">Parceiros</a>
+
+        <button
+          className={`menu-toggle mobile-only ${isMenuOpen ? 'open' : ''}`}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Abrir menu de navegação"
+        >
+          <span className="hamburger-bar"></span>
+          <span className="hamburger-bar"></span>
+          <span className="hamburger-bar"></span>
+        </button>
+
+        <nav className={`nav ${isMenuOpen ? 'active' : ''}`} aria-label="Navegação principal">
+          <a href="#sobre" onClick={() => setIsMenuOpen(false)}>Sobre</a>
+          <a href="#pilares" onClick={() => setIsMenuOpen(false)}>Pilares</a>
+          <a href="#programacao" onClick={() => setIsMenuOpen(false)}>Programação</a>
+          <a href="#parceiros" onClick={() => setIsMenuOpen(false)}>Parceiros</a>
+
+          <div className="mobile-only sidebar-actions">
+            <a className="sidebar-edital-link" href="/edital.pdf" target="_blank" rel="noreferrer" onClick={() => setIsMenuOpen(false)}>
+              Acessar edital
+            </a>
+            <a className="nav-cta" href={participationFormUrl} target="_blank" rel="noreferrer" onClick={() => setIsMenuOpen(false)}>
+              <span>Inscreva-se</span>
+            </a>
+          </div>
         </nav>
 
-        {/* CONTÊINER ALINHADO AO EXTREMO DIREITO */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '24px',
-          marginLeft: 'auto'
-        }}>
-          
-          {/* LINK DO EDITAL (TEXTO) */}
-          <a 
-            href="/edital.pdf" 
-            target="_blank" 
-            rel="noreferrer"
-            style={{ 
-              color: '#000000', 
-              textDecoration: 'none',
-              fontSize: '14px',
-              fontWeight: 500,
-              opacity: 0.9,
-              transition: 'opacity 0.2s',
-              whiteSpace: 'nowrap'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
-            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}
-          >
+        <div className="topbar-actions desktop-only">
+          <a className="edital-link" href="/edital.pdf" target="_blank" rel="noreferrer">
             Acessar edital
           </a>
-
-          {/* BOTÃO INSCREVA-SE */}
           <a className="nav-cta" href={participationFormUrl} target="_blank" rel="noreferrer">
             <span>Inscreva-se</span>
           </a>
-          
-        
-          
         </div>
       </header>
 
