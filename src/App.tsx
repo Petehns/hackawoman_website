@@ -56,7 +56,7 @@ type AgendaDay = {
   periods: AgendaPeriod[];
 };
 
-const participationFormUrl = "https://forms.gle/ZJ8gCqx6sfC4hatz5";
+const participationFormUrl = "https://forms.gle/BH85Hj1xWaUh28Nh7";
 
 const highlights = [
   {
@@ -420,6 +420,30 @@ function App() {
   const [isTopbarVisible, setIsTopbarVisible] = useState(true);
   const anchorScrollHoldUntilRef = useRef(0);
 
+  const calculateTimeLeft = () => {
+    const difference = +new Date('2026-07-03T08:00:00') - +new Date();
+    let timeLeft = { dias: 0, horas: 0, minutos: 0, segundos: 0 };
+
+    if (difference > 0) {
+      timeLeft = {
+        dias: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        horas: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutos: Math.floor((difference / 1000 / 60) % 60),
+        segundos: Math.floor((difference / 1000) % 60),
+      };
+    }
+    return timeLeft;
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+    return () => clearTimeout(timer);
+  });
+
   useEffect(() => {
     let lastScrollY = window.scrollY;
     let ticking = false;
@@ -512,7 +536,7 @@ function App() {
 
   return (
     <main className="site">
-      <header
+     <header
         className={isTopbarVisible ? "topbar" : "topbar topbar-hidden"}
         onClick={handleTopbarAnchorClick}
       >
@@ -525,9 +549,43 @@ function App() {
           <a href="#programacao">Programação</a>
           <a href="#parceiros">Parceiros</a>
         </nav>
-        <a className="nav-cta" href={participationFormUrl} target="_blank" rel="noreferrer">
-          <span>Quero participar</span>
-        </a>
+
+        {/* CONTÊINER ALINHADO AO EXTREMO DIREITO */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '24px',
+          marginLeft: 'auto'
+        }}>
+          
+          {/* LINK DO EDITAL (TEXTO) */}
+          <a 
+            href="/edital.pdf" 
+            target="_blank" 
+            rel="noreferrer"
+            style={{ 
+              color: '#000000', 
+              textDecoration: 'none',
+              fontSize: '14px',
+              fontWeight: 500,
+              opacity: 0.9,
+              transition: 'opacity 0.2s',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}
+          >
+            Acessar edital
+          </a>
+
+          {/* BOTÃO INSCREVA-SE */}
+          <a className="nav-cta" href={participationFormUrl} target="_blank" rel="noreferrer">
+            <span>Inscreva-se</span>
+          </a>
+          
+        
+          
+        </div>
       </header>
 
       <section className="hero" id="home" data-scrollbar-section="orange">
@@ -681,25 +739,103 @@ function App() {
           </div>
         </div>
       </section>
+<section className="final-cta section-pad" id="inscricao" data-scrollbar-section="orange">
+  <div className="cta-content">
+    <SectionTitle eyebrow="Inscrições abertas" title="Faça parte da história" light />
+    <p>
+      Seja uma das mulheres que vai transformar o ecossistema tech de Pernambuco.
+    </p>
 
-      <section className="final-cta section-pad" id="inscricao" data-scrollbar-section="orange">
-        <div className="cta-content">
-          <SectionTitle eyebrow="Inscrições abertas" title="Faça parte da história" light />
-          <p>
-            Seja uma das mulheres que vai transformar o ecossistema tech de Pernambuco.
-          </p>
-          <a
-            className="button button-primary"
-            href={participationFormUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span>Quero participar</span>
-          </a>
-          <small>As vagas são limitadas, então garanta já a sua!</small>
-          <img className="final-cta-logo" src={logoHackaWomanVertical} alt="HackaWoman" />
-        </div>
-      </section>
+    {/* 1. BOTÃO DE INSCRIÇÃO COM MARGENS RESPONSIVAS */}
+    <a
+      className="button button-primary"
+      href={participationFormUrl}
+      target="_blank"
+      rel="noreferrer"
+      style={{ 
+        marginTop: 'clamp(-20px, -3vw, 0px)',   /* Menos agressivo no mobile, evita grudar no texto de cima */
+        marginBottom: 'clamp(24px, 5vw, 60px)' /* Diminui o espaçamento no mobile e assume 60px no desktop */
+      }}
+    >
+      <span>Quero participar</span>
+    </a>
+
+    {/* 📦 CONTÊINER ÚNICO MESTRE (Une o cronômetro e o bloco de textos) */}
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '20px', /* ⬅️ Defina aqui a distância exata entre os NÚMEROS e os TEXTOS */
+      width: '100%'
+    }} className="countdown-master-wrapper">
+
+     {/* 2. CRONÔMETRO COM PLURAL/SINGULAR AUTOMÁTICO */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '14px',
+        fontFamily: '"Bebas Neue", sans-serif',
+        fontSize: 'clamp(44px, 5vw, 64px)',
+        color: '#ffffff',
+        margin: '0',
+        letterSpacing: '1px',
+        lineHeight: 1
+      }} className="countdown-container">
+        <span>
+          {String(timeLeft.dias).padStart(2, '0')}
+          <span style={{ color: '#ffffff', fontSize: '0.5em', marginLeft: '3px' }}>
+            {timeLeft.dias === 1 ? 'Dia' : 'Dias'}
+          </span>
+        </span>
+        
+        <span>
+          {String(timeLeft.horas).padStart(2, '0')}
+          <span style={{ color: '#ffffff', fontSize: '0.5em', marginLeft: '3px' }}>
+            {timeLeft.horas === 1 ? 'Hora' : 'Horas'}
+          </span>
+        </span>
+        
+        <span>
+          {String(timeLeft.minutos).padStart(2, '0')}
+          <span style={{ color: '#ffffff', fontSize: '0.5em', marginLeft: '3px' }}>
+            {timeLeft.minutos === 1 ? 'Minuto' : 'Minutos'}
+          </span>
+        </span>
+        
+        <span>
+          {String(timeLeft.segundos).padStart(2, '0')}
+          <span style={{ color: '#ffffff', fontSize: '0.5em', marginLeft: '3px' }}>
+            {timeLeft.segundos === 1 ? 'Segundo' : 'Segundos'}
+          </span>
+        </span>
+      </div>
+
+      {/* CONTÊINER INTERNO SÓ COM OS TEXTOS */}
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        gap: '10px' /* ⬅️ Distância entre uma frase e outra */
+      }}>
+        {/* 3. TEXTO INDICADOR DO CRONÔMETRO */}
+        <small style={{ margin: 0, display: 'block' }}>
+          Até o início do evento.
+        </small>
+
+        {/* 4. TEXTO DE VAGAS LIMITADAS */}
+        <small style={{ margin: 0, display: 'block' }}>
+          As vagas são limitadas, então garanta já a sua!
+        </small>
+      </div>
+
+    </div> {/* ⬅️ FIM DO CONTÊINER ÚNICO MESTRE */}
+
+    {/* 5. LOGO DO EVENTO */}
+    <img className="final-cta-logo" src={logoHackaWomanVertical} alt="HackaWoman" />
+  </div>
+</section>
 
       <footer className="footer" data-scrollbar-section="orange">
         <div className="footer-main">

@@ -1800,4 +1800,59 @@ a {
     gap: 30px;
   }
 
+  /* Container principal que junta os blocos e os dois pontos */
+.countdown-container {
+  display: flex !important;
+  flex-direction: row !important; /* Força ficar lado a lado */
+  align-items: center !important;
+  justify-content: center !important;
+  gap: clamp(8px, 2vw, 16px) !important; /* Espaçamento responsivo */
+  margin: 40px auto !important;
+  width: 100% !important;
+  max-width: 450px;
+}
+
+/* Cada caixinha individual (Dias, Horas...) */
+.countdown-block {
+  display: flex !important;
+  flex-direction: column !important; /* O número em cima, o texto embaixo */
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(255, 255, 255, 0.08) !important; 
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  padding: 12px 14px !important;
+  border-radius: 12px !important;
+  min-width: 70px !important;
+}
+
+/* Os números grandes */
+.countdown-block span {
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: clamp(28px, 3.5vw, 38px) !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  line-height: 1 !important;
+}
+
+/* Os textos pequenos (Dias, Horas...) */
+.countdown-block small {
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  color: #ff7e40 !important; 
+  letter-spacing: 1px !important;
+  margin-top: 4px !important;
+  display: block !important;
+}
+
+/* Os dois pontos (:) */
+.countdown-divider {
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: 28px !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  display: flex !important;
+  align-items: center !important;
+  height: 100% !important;
+  padding-bottom: 16px !important; /* Compensa a altura do texto pequeno */
+}
+
 }
