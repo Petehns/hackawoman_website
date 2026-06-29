@@ -28,7 +28,7 @@ import agendaPinIcon from "./assets/icons/agenda-pin.svg";
 import compromissoIcon from "./assets/icons/compromisso.png";
 import missaoIcon from "./assets/icons/missao.png";
 import visaoIcon from "./assets/icons/visao.png";
-import { Analytics } from "@vercel/analytics/next"
+
 
 type Pillar = {
   number: string;
@@ -58,6 +58,8 @@ type AgendaDay = {
 };
 
 const participationFormUrl = "https://forms.gle/BH85Hj1xWaUh28Nh7";
+const esquentaUrl = "https://meet.google.com/tvg-fuxm-axe"
+const instagramPageUrl = "https://www.instagram.com/ligia.ufpe/";
 
 const highlights = [
   {
@@ -637,9 +639,15 @@ function App() {
             >
               Acessar edital
             </a>
-            <span className="nav-cta cta-unavailable" aria-disabled="true">
-              <span>Inscrições encerradas</span>
-            </span>
+            <a
+              className="nav-cta"
+              href={esquentaUrl}
+              target="_blank"
+              rel="noreferrer"
+              onClick={handleSidebarExternalLinkClick}
+            >
+              <span>Entrar do Esquenta Hackawoman</span>
+            </a>
           </div>
         </nav>
 
@@ -647,9 +655,9 @@ function App() {
           <a className="edital-link" href="/edital.pdf" target="_blank" rel="noreferrer">
             Acessar edital
           </a>
-          <span className="nav-cta cta-unavailable" aria-disabled="true">
-            <span>Inscrições encerradas</span>
-          </span>
+          <a className="nav-cta" href={esquentaUrl} target="_blank" rel="noreferrer">
+            <span>Esquenta Hackawoman</span>
+          </a>
         </div>
       </header>
 
@@ -659,10 +667,14 @@ function App() {
         <div className="hero-content">
           <HeroLogo />
           <p>Juntas, transformando o hoje e construindo o amanhã.</p>
-          <span className="button button-primary cta-unavailable" aria-disabled="true">
-            <span>Inscrições encerradas</span>
-          </span>
-        
+          <a
+            className="button button-primary"
+            href={esquentaUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span>Entrar do Esquenta Hackawoman!</span>
+          </a>
           <div className="hero-date">
             <strong>03 e 04 de Julho</strong>
             <span>
@@ -722,7 +734,7 @@ function App() {
               <br />
               Realize.
             </strong>
-            <a href={"https://www.instagram.com/ligia.ufpe/"} target="_blank" rel="noreferrer">
+            <a href={instagramPageUrl} target="_blank" rel="noreferrer">
               <span>Visitar nosso perfil</span>
             </a>
           </div>
@@ -802,22 +814,24 @@ function App() {
       </section>
 <section className="final-cta section-pad" id="inscricao" data-scrollbar-section="orange">
   <div className="cta-content">
-    <SectionTitle eyebrow="Inscrições encerradas" title="Faça parte da história" light />
+    <SectionTitle eyebrow="Inscrições encerradas. Venha particiar do Esquenta Hackawoman!" title="Faça parte da história" light />
     <p>
       Seja uma das mulheres que vai transformar o ecossistema tech de Pernambuco.
     </p>
 
     {/* 1. BOTÃO DE INSCRIÇÃO COM MARGENS RESPONSIVAS */}
-   <span
-      className="button button-primary cta-unavailable"
-      aria-disabled="true"
-      style={{
-        marginTop: 'clamp(-20px, -3vw, 0px)',
-        marginBottom: 'clamp(24px, 5vw, 60px)'
+    <a
+      className="button button-primary"
+      href={esquentaUrl}
+      target="_blank"
+      rel="noreferrer"
+      style={{ 
+        marginTop: 'clamp(-20px, -3vw, 0px)',   /* Menos agressivo no mobile, evita grudar no texto de cima */
+        marginBottom: 'clamp(24px, 5vw, 60px)' /* Diminui o espaçamento no mobile e assume 60px no desktop */
       }}
     >
-      <span>Inscrições encerradas</span>
-    </span>
+      <span>Entrar do Esquenta Hackawoman</span>
+    </a>
 
     {/* 📦 CONTÊINER ÚNICO MESTRE (Une o cronômetro e o bloco de textos) */}
     <div style={{
@@ -885,7 +899,7 @@ function App() {
 
         {/* 4. TEXTO DE VAGAS LIMITADAS */}
         <small style={{ margin: 0, display: 'block' }}>
-          Obrigada a todas as inscritas! Nos vemos no Centro de Informática da UFPE.
+          Obrigada a todas as inscritas! Nos vemos no Centro de Informática da UFPE nos dias 03 e 04 de Julho de 2026.
         </small>
       </div>
 
