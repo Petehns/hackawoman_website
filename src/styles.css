@@ -367,7 +367,7 @@ a {
 }
 
 .hero-content p {
-  width: min(410px, 100%);
+  width: min(490px, 100%);
   margin: 0;
   color: var(--color-white);
   font-family: var(--font-body);
@@ -375,6 +375,45 @@ a {
   font-weight: 600;
   letter-spacing: 2px;
   line-height: 1.6;
+}
+.hero-content pp {
+  width: min(200px, 100%);
+  margin: 0;
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: var(--hero-copy-size);
+  font-weight: 300;
+  letter-spacing: 2px;
+  line-height: 1.6;
+}
+.hero-date {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-white);
+}
+
+.hero-subtitle {
+  margin: 0;
+  font-size: 0.1rem;
+  font-weight: 100;
+  color: var(--color-white);
+}
+
+.hero-description {
+  margin: 0;
+  max-width: 460px;
+  font-size: 0.2rem;
+  font-weight: 50;
+  line-height: 1.2;
+  color: var(--color-white);
 }
 
 .hero-logo {

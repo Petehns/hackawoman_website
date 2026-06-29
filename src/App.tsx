@@ -646,7 +646,7 @@ function App() {
               rel="noreferrer"
               onClick={handleSidebarExternalLinkClick}
             >
-              <span>Esquenta Hackawoman</span>
+              <span>Participar do Esquenta</span>
             </a>
           </div>
         </nav>
@@ -656,7 +656,7 @@ function App() {
             Acessar edital
           </a>
           <a className="nav-cta" href={esquentaUrl} target="_blank" rel="noreferrer">
-            <span>Esquenta Hackawoman</span>
+            <span>Participar do Esquenta</span>
           </a>
         </div>
       </header>
@@ -666,17 +666,29 @@ function App() {
         <DecorSquares className="decor-hero-gray-bottom" src={decorCinza2} />
         <div className="hero-content">
           <HeroLogo />
-          <p>Juntas, transformando o hoje e construindo o amanhã.</p>
+          <p className="hero-date">HOJE • 19H30 • ESQUENTA HACKAWOMAN</p>
+
+  {/* <h1 className="hero-title">ESQUENTA HACKAWOMAN</h1> */}
+
+  <p className="hero-subtitle">
+    Tire todas as suas dúvidas antes do Hackathon.
+  </p>
+
+  {/* <p className="hero-description">
+    Conheça a dinâmica do evento, as premiações e o funcionamento da competição ao vivo.
+  </p> */}
+
           <a
             className="button button-primary"
             href={esquentaUrl}
             target="_blank"
             rel="noreferrer"
           >
-            <span>Esquenta Hackawoman!</span>
+            <span>Participar do esquenta</span>
           </a>
+          
           <div className="hero-date">
-            <strong>03 e 04 de Julho</strong>
+            {/* <strong>03 e 04 de Julho</strong> */}
             <span>
               <em>Centro de Informática UFPE</em>
             </span>
@@ -830,7 +842,7 @@ function App() {
         marginBottom: 'clamp(24px, 5vw, 60px)' /* Diminui o espaçamento no mobile e assume 60px no desktop */
       }}
     >
-      <span>Entrar do Esquenta Hackawoman</span>
+      <span>Participar do Esquenta</span>
     </a>
 
     {/* 📦 CONTÊINER ÚNICO MESTRE (Une o cronômetro e o bloco de textos) */}
