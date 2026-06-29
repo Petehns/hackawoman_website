@@ -646,7 +646,7 @@ function App() {
               rel="noreferrer"
               onClick={handleSidebarExternalLinkClick}
             >
-              <span>Entrar do Esquenta Hackawoman</span>
+              <span>Esquenta Hackawoman</span>
             </a>
           </div>
         </nav>
@@ -673,7 +673,7 @@ function App() {
             target="_blank"
             rel="noreferrer"
           >
-            <span>Entrar do Esquenta Hackawoman!</span>
+            <span>Esquenta Hackawoman!</span>
           </a>
           <div className="hero-date">
             <strong>03 e 04 de Julho</strong>
