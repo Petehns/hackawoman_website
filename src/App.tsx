@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
+import { createPortal } from "react-dom";
 import decorBranco from "./assets/decor/quadradinhos-branco.png";
 import decorCinza from "./assets/decor/quadradinhos-cinza.png";
 import decorCinza2 from "./assets/decor/quadradinhos-cinza2.png";
@@ -42,13 +43,20 @@ type AgendaDay = {
   driveUrl: string;
 };
 
+type TeamMember = {
+  name: string;
+  linkedin: string;
+  photo: string;
+};
+
 type Winner = {
   position: 1 | 2 | 3;
   team: string;
   project: string;
   description: string;
-  category: string;
   photo?: string;
+  projectDescription: string;
+  members: TeamMember[];
 };
 
 type GalleryPhoto = {
@@ -62,24 +70,47 @@ const winners: Winner[] = [
     team: "Manastech",
     project: "MIA",
     description: "Inteligência Artificial para reduzir a carga mental de mães trabalhadoras",
-    category: "Ver página",
     photo: "/winners/1lugar.jpg",
+    projectDescription: "A MIA nasceu da vontade de aliviar uma carga que muitas vezes é invisível: a carga mental das mães trabalhadoras. Em menos de 24 horas, transformamos pesquisas, empatia e tecnologia em uma solução que utiliza Inteligência Artificial para organizar a rotina, antecipar imprevistos e oferecer mais tranquilidade no dia a dia. Mais do que criar um aplicativo, quisemos mostrar que a inovação faz mais sentido quando coloca as pessoas no centro e busca resolver problemas reais.",
+    members: [
+      { name: "Andreza Simone", linkedin: "https://www.linkedin.com/in/andreza-carvalho-0361a398", photo: "/linkedin/1lugar/andrezaSimone.jpg" },
+      { name: "Jennifer Dantas", linkedin: "https://www.linkedin.com/in/jennifer-dantas-de-almeida-b8b24b388/", photo: "/linkedin/1lugar/jenniferDantas.jpg" },
+      { name: "Larissa Giovanna", linkedin: "https://www.linkedin.com/in/larissa-giovanna/", photo: "/linkedin/1lugar/larissaGiovanna.jpg" },
+      { name: "Maria Clara", linkedin: "https://www.linkedin.com/in/mariaclaraosaraujo/", photo: "/linkedin/1lugar/mariaClara.jpg" },
+      { name: "Rita de Cassia", linkedin: "https://www.linkedin.com/in/rita-lins-667a02407/", photo: "/linkedin/1lugar/ritaDeCassia.jpg" },
+      { name: "Roseane da Silva", linkedin: "https://www.linkedin.com/in/roseane-da-silva-356276214/", photo: "/linkedin/1lugar/roseane.jpg" },
+    ],
   },
   {
     position: 2,
     team: "Aurora",
     project: "Projeto Aurora",
     description: "Proteção financeira para recomeços.",
-    category: "Ver página",
     photo: "/winners/2lugar.jpeg",
+    projectDescription: "A Aurora nasceu de uma equipe que, desde o início, tinha o objetivo de criar uma solução que realmente ajudasse as mulheres. Acredito que conseguimos sair da caixinha quando pensamos não em mais um aplicativo, mas em uma API integrada exatamente onde o problema acontece: nos bancos. A violência patrimonial acontece continuamente nos aplicativos bancários, e foi ali que decidimos atuar. Nossa trajetória está apenas começando, e pretendemos evoluir ainda mais, principalmente com as oportunidades de mentoria oferecidas pelo HackaWoman.",
+    members: [
+      { name: "Dayane Carla", linkedin: "https://www.linkedin.com/in/dayane-anast%C3%A1cio-b0686934b", photo: "/linkedin/2lugar/dayaneCarla.jpg" },
+      { name: "Julia Parra", linkedin: "https://www.linkedin.com/in/julia-parra", photo: "/linkedin/2lugar/juliaParra.jpg" },
+      { name: "Amanda Trinity", linkedin: "https://www.linkedin.com/in/amanda-trinity-6b377123b", photo: "/linkedin/2lugar/amandaTrinity.jpg" },
+      { name: "Camila Campos", linkedin: "https://www.linkedin.com/in/camila-campos-385411346", photo: "/linkedin/2lugar/camilaCampos.jpg" },
+      { name: "Alice Ralime", linkedin: "https://www.linkedin.com/in/alice-ralime", photo: "/linkedin/2lugar/aliceRamine.jpg" },
+      { name: "Maria Eduarda", linkedin: "https://www.linkedin.com/in/maria-eduarda-torres-921131361", photo: "/linkedin/2lugar/mariaEduarda.jpg" },
+    ],
   },
   {
     position: 3,
     team: "Sálvia",
     project: "AEGIS",
-    description: "Arquivo Eletrônico com Garantia de Integridae e Segurança.",
-    category: "Ver página",
+    description: "Arquivo Eletrônico com Garantia de Integridade e Segurança.",
     photo: "/winners/3lugar.jpg",
+    projectDescription: "No Brasil, 1 em cada 4 mulheres já sofreu violência doméstica. Entre elas, muitas enfrentam a violência patrimonial, quando seus documentos, bens e provas são escondidos ou destruídos, dificultando a denúncia e a reconstrução de suas vidas. Pensando nisso, criamos a AEGIS — um cofre digital camuflado como um aplicativo de receitas. Por trás dessa aparência discreta, existe uma plataforma protegida por criptografia, onde a usuária pode armazenar documentos importantes sem deixar rastros e acessá-los rapidamente em momentos de emergência. Com Inteligência Artificial, os documentos são identificados, classificados e organizados automaticamente. A AEGIS foi criada para proteger mais do que documentos. Ela protege a autonomia, a identidade e a oportunidade de um novo começo.",
+    members: [
+      { name: "Maria Giulia", linkedin: "https://www.linkedin.com/in/giuliasza/", photo: "/linkedin/3lugar/mariaGiulia.jpg" },
+      { name: "Yasmin Araújo", linkedin: "https://www.linkedin.com/in/yasminmayara-arj/", photo: "/linkedin/3lugar/yasminAraujo.jpg" },
+      { name: "Gabriela Rodrigues", linkedin: "https://www.linkedin.com/in/gabriela-r-s-luz/", photo: "/linkedin/3lugar/gabrielaRodrigues.jpg" },
+      { name: "Nicolly Araújo", linkedin: "https://www.linkedin.com/in/nicolly-chaves-59347622b/", photo: "/linkedin/3lugar/nicollyAraujo.jpg" },
+      { name: "Juliana Freire", linkedin: "https://www.linkedin.com/in/juliana-freire-40393685/", photo: "/linkedin/3lugar/julianaFreire.jpg" },
+    ],
   },
 ];
 
@@ -699,38 +730,168 @@ function WinnersConfetti() {
   return <canvas ref={canvasRef} className="winners-confetti" aria-hidden="true" />;
 }
 
+function generateMosaicLayout(members: TeamMember[]) {
+  return [...members].sort(() => Math.random() - 0.5);
+}
+
+function WinnerModal({ winner, onClose }: { winner: Winner; onClose: () => void }) {
+  const [slide, setSlide] = useState(0);
+  const [polaroidOpen, setPolaroidOpen] = useState(false);
+  const memberLayouts = useMemo(() => generateMosaicLayout(winner.members), [winner.members]);
+  const p = winner.position;
+  const badgeName = p === 1 ? 'Primeiro' : p === 2 ? 'Segundo' : 'Terceiro';
+  const placeFolder = p === 1 ? '1lugar' : p === 2 ? '2lugar' : '3lugar';
+  const groupPhoto = `/linkedin/${placeFolder}/grupo${p}.jpg`;
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (polaroidOpen) setPolaroidOpen(false);
+        else onClose();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [onClose, polaroidOpen]);
+
+  return <>
+    {createPortal(
+      <div className="wm-overlay" onClick={onClose}>
+        <div className="wm-modal" onClick={e => e.stopPropagation()}>
+
+          {/* Cover */}
+          <div className={`wm-cover wm-cover-p${p}`}>
+            {slide === 0 ? (
+              <img src={`/capas/capa${p}.jpg`} className="wm-cover-photo" alt={winner.team} />
+            ) : (
+              <img src={winner.photo} className="wm-cover-photo" alt={winner.team} />
+            )}
+            <div className="wm-arrows-row">
+              <button className="wm-arrow wm-arrow-left" onClick={e => { e.stopPropagation(); setSlide(s => (s + 1) % 2); }}>&#8249;</button>
+              <div className="wm-arrow-spacer" />
+              <button className="wm-arrow wm-arrow-right" onClick={e => { e.stopPropagation(); setSlide(s => (s + 1) % 2); }}>&#8250;</button>
+            </div>
+            <button className="wm-close" onClick={onClose}>&#10005;</button>
+            <div className="wm-dots">
+              {[0, 1].map(i => (
+                <button key={i} className={`wm-dot${i === slide ? ' wm-dot--on' : ''}`} onClick={e => { e.stopPropagation(); setSlide(i); }} />
+              ))}
+            </div>
+          </div>
+
+          {/* Body */}
+          <div className="wm-body">
+            <div className="wm-body-header">
+              <span className="wm-body-team">{winner.team.toUpperCase()}</span>
+              <div className={`winner-badge winner-badge-${p} wm-badge`}>
+                <img className="winner-badge-bg" src={`/winners/circulo${badgeName}.png`} alt="" aria-hidden="true" />
+                <span className="winner-pos-num">{p}º</span>
+                <span className="winner-pos-label">LUGAR</span>
+              </div>
+            </div>
+
+            <hr className="wm-hr" />
+
+            <p className={`wm-section-label wm-label-${p}`}>SOBRE O PROJETO</p>
+            <p className="wm-desc">{winner.projectDescription}</p>
+
+            <hr className="wm-hr" />
+
+            <div className="wm-mosaic">
+              {memberLayouts.map((member, i) => (
+                <a
+                  key={i}
+                  href={member.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="wm-member"
+                >
+                  <img
+                    src={member.photo}
+                    alt={member.name}
+                    onError={e => { (e.currentTarget as HTMLImageElement).style.opacity = '0'; }}
+                  />
+                  <div className="wm-member-overlay">
+                    <div className="wm-linkedin">
+                      <img src="/icons/linkedin.png" alt="LinkedIn" width="22" height="22" />
+                    </div>
+                    <p className="wm-member-name">
+                      <span className="wm-name-full">{member.name}</span>
+                      <span className="wm-name-first">{member.name.split(' ')[0]}</span>
+                    </p>
+                  </div>
+                </a>
+              ))}
+              <button className="wm-group" onClick={e => { e.stopPropagation(); setPolaroidOpen(true); }}>
+                <img src={groupPhoto} alt={`Foto do grupo ${winner.team}`} />
+                <div className="wm-group-overlay">
+                  <span className="wm-group-btn">Ver foto</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>,
+      document.body
+    )}
+    {polaroidOpen && createPortal(
+      <div className="wm-polaroid-overlay" onClick={() => setPolaroidOpen(false)}>
+        <div className="wm-polaroid" onClick={e => e.stopPropagation()}>
+          <button className="wm-polaroid-close" onClick={() => setPolaroidOpen(false)}>&#10005;</button>
+          <img src={groupPhoto} alt={winner.team} />
+          <div className="wm-polaroid-footer">
+            <p className="wm-polaroid-team">{winner.team}</p>
+            <a href={groupPhoto} download={`${winner.team}.jpg`} className="wm-polaroid-download">&#8595; Download</a>
+          </div>
+        </div>
+      </div>,
+      document.body
+    )}
+  </>;
+}
+
 function WinnerCard({ winner }: { winner: Winner }) {
+  const [modalOpen, setModalOpen] = useState(false);
   const p = winner.position;
   return (
-    <article className={`winner-card winner-card-${p}`}>
-      {p === 1 && (
-        <img src="/winners/tagCampeas.png" className="winner-campeas-tag" alt="Campeãs" />
-      )}
-      <div className={`winner-img winner-img-${p}`}>
-        {winner.photo
-          ? <img src={winner.photo} alt={`Equipe ${winner.team}`} />
-          : <div className="winner-img-placeholder" />}
-      </div>
-      <div className={`winner-badge winner-badge-${p}`}>
-        <img
-          className="winner-badge-bg"
-          src={`/winners/circulo${p === 1 ? 'Primeiro' : p === 2 ? 'Segundo' : 'Terceiro'}.png`}
-          alt=""
-          aria-hidden="true"
-        />
-        <span className="winner-pos-num">{p}º</span>
-        {p <= 3 && <span className="winner-pos-label">LUGAR</span>}
-      </div>
-      <div className="winner-divider" />
-      <div className="winner-team-block">
-        <p className="winner-equipe">EQUIPE</p>
-        <h3 className={`winner-name winner-name-${p}`}>{winner.team}</h3>
-      </div>
-      <p className="winner-desc">
-        <strong>{winner.project}</strong> – {winner.description}
-      </p>
-      <span className={`winner-tag winner-tag-${p}`}>{winner.category}</span>
-    </article>
+    <>
+      <article className={`winner-card winner-card-${p}`}>
+        {p === 1 && (
+          <img src="/winners/tagCampeas.png" className="winner-campeas-tag" alt="Campeãs" />
+        )}
+        <div className={`winner-img winner-img-${p}`}>
+          {winner.photo
+            ? <img src={winner.photo} alt={`Equipe ${winner.team}`} />
+            : <div className="winner-img-placeholder" />}
+        </div>
+        <div className={`winner-badge winner-badge-${p}`}>
+          <img
+            className="winner-badge-bg"
+            src={`/winners/circulo${p === 1 ? 'Primeiro' : p === 2 ? 'Segundo' : 'Terceiro'}.png`}
+            alt=""
+            aria-hidden="true"
+          />
+          <span className="winner-pos-num">{p}º</span>
+          {p <= 3 && <span className="winner-pos-label">LUGAR</span>}
+        </div>
+        <div className="winner-divider" />
+        <div className="winner-team-block">
+          <p className="winner-equipe">EQUIPE</p>
+          <h3 className={`winner-name winner-name-${p}`}>{winner.team}</h3>
+        </div>
+        <p className="winner-desc">
+          <strong>{winner.project}</strong> – {winner.description}
+        </p>
+        <button className={`winner-tag winner-tag-${p}`} onClick={() => setModalOpen(true)}>
+          Ver projeto
+        </button>
+      </article>
+      {modalOpen && <WinnerModal winner={winner} onClose={() => setModalOpen(false)} />}
+    </>
   );
 }
 
