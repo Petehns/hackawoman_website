@@ -588,15 +588,25 @@ function PolaroidModal({ photo, onClose }: { photo: GalleryPhoto; onClose: () =>
     };
   }, [photo.src, onClose]);
 
-  const download = () => {
+  const download = async () => {
     if (!dataUrl) return;
+    if (navigator.canShare) {
+      try {
+        const blob = await (await fetch(dataUrl)).blob();
+        const file = new File([blob], 'hackawoman-2026-polaroid.png', { type: 'image/png' });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file] });
+          return;
+        }
+      } catch { /* usuário cancelou ou sem suporte — cai no fallback */ }
+    }
     const a = document.createElement('a');
     a.href = dataUrl;
     a.download = 'hackawoman-2026-polaroid.png';
     a.click();
   };
 
-  return (
+  return createPortal(
     <div className="polaroid-overlay" onClick={onClose}>
       <div className="polaroid-modal" onClick={e => e.stopPropagation()}>
         <button className="polaroid-close" onClick={onClose} aria-label="Fechar">✕</button>
@@ -620,10 +630,12 @@ function PolaroidModal({ photo, onClose }: { photo: GalleryPhoto; onClose: () =>
               </svg>
               Baixar imagem
             </button>
+            <p className="polaroid-mobile-tip">Pressione e segure a imagem para salvar</p>
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
